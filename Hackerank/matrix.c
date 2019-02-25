@@ -73,3 +73,27 @@ int main() {
     }
     return 0;
 }
+
+struct document get_document(char* text) {
+    int count_word, count_paragraph, count_sentences;
+    int StoreWorld[MAX_PARAGRAPHS];
+    count_word = count_paragraph = count_sentences = 0;
+
+    for (int i=0; i < strlen(text); i++) {
+        if (*(text+i) == '.') {
+            count_word++;
+            count_sentences++;
+            if ((*(text+i+1) == '\n') || (*(text+i+1) == '\0')) {
+                StoreWorld[count_paragraph] = count_word;
+                count_paragraph++;
+                count_word = 0;
+            }
+        }
+        else if (*(text+i) == ' ') {
+            count_word++;
+        }
+    }
+    struct document getdata;
+    getdata.data = (paragraph*)malloc(MAX_PARAGRAPHS * sizeof(paragraph));
+
+}
