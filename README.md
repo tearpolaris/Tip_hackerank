@@ -12,4 +12,10 @@
 + When passing multimdimensional-arry,  declare an array, must specify size all dimensional but lefmost
 + Mua Tiki: 642k (500k tay cam + 142k sach)
 + C89: array with constant size, C99: array with variable length, even length is known when run-time.
++ Can add or subtrat pointer with an integer, only three arithmetic can be allowed in C are add/subtract pointer to an integer, and subtract two pointers (cannot add pointer + pointer, cannot add pointer + (float, double)number.
++ One way to initialize a pointer is assign zero to it.
++ Pointer function: A function hold a address to entry 
++ In C. malloc (void*) type will be converted automatically to left-side type (but it does not occur in C++).
++ Free function return previously allocated memory to the system 
+
 
