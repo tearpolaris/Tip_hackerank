@@ -53,3 +53,11 @@ int main()
     }
     return 0;
 }
+
+virtual void cw_wet_callback_reg(void)
+_bool ChkAddrWithFactorIndex(cuint num, cuint factor_index[])
+std::map
+class::function<REG_TYPE>
+struct {}
+this
+typedef
