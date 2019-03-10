@@ -17,5 +17,15 @@
 + Pointer function: A function hold a address to entry 
 + In C. malloc (void*) type will be converted automatically to left-side type (but it does not occur in C++).
 + Free function return previously allocated memory to the system 
-
++ In early C versions, no void-type defined, do vậy nếu không trả về giá trị thì mặc định là kiểu int
++ Hàm main return value to the calling process (operating system). If no value is return, most C compiler will return 0, but does not rely on it.
++ Đối với đệ quy, không tạo ra 1 bản sao (copy) của function mà tạo ra 1 tập (set) các biến variables và parameters
++ Hiếm khi đệ quy cải thiện được hiệu quả, vì the recursive version excecute a bit slower than the iterative equivalent code
++ Main advantages to recursive function is that you can you them to create a simpler and clearer version of several algorithms.
++ Khi thực hiện đệ quy phải có điều kiện if, buộc recursive function return mà không gọi thêm đệ quy
++ C original không có prototype function, được thêm vào trong C89 và cũng k yêu cầu phải có function prototype. Nhưng C++ thì phải có 
++ Seperate function với prototype vì tính thực tế
++ Đối với C khai báo: int name_func() ==> nghĩa là không có information của parameter. C compilers sẽ hiểu rằng không có paramter hoặc có paramters. Khác vs C++ ==> không có paramters!!!
++ Hàm vs tham số tùy biến variant paramters: int funcion(double x, float y, ...). Có dấu 3 chấm ở cuối. Phải có ít nhất 1 tham số trong khai báo prototype. In this case, function-prototype is iilegal int funcion(...)
++ Old-style function: return_type name_function(); ==> không có tham số trong hàm
 
