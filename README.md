@@ -28,4 +28,8 @@
 + Đối với C khai báo: int name_func() ==> nghĩa là không có information của parameter. C compilers sẽ hiểu rằng không có paramter hoặc có paramters. Khác vs C++ ==> không có paramters!!!
 + Hàm vs tham số tùy biến variant paramters: int funcion(double x, float y, ...). Có dấu 3 chấm ở cuối. Phải có ít nhất 1 tham số trong khai báo prototype. In this case, function-prototype is iilegal int funcion(...)
 + Old-style function: return_type name_function(); ==> không có tham số trong hàm
-
++ Struct: pass call-by-value cần phải push struct tới stack khi function được thực thi -> với struct k nhiều members thì có thể nhưng khi quá nhiều member có thể dẫn tới giảm hiệu suất => Pass structure bằng pointer, chỉ có địa chỉ được đưa vào stack
++ C89: structure có thể nested 16 level, C99 có thể nested 63 levels
++ Khi declare unions, compiler sẽ cấp phát để có thể lưu trữ members lớn nhất của union đó. Vì members share chung bộ nhớ
++ Cách truy xuất unions cũng giống như structure, can use dot or arrow operator.
++ Bit-fields: type: length, với kiểu là int, signed hoặc unsigned và length là độ dài của bit.
