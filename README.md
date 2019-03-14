@@ -33,3 +33,4 @@
 + Khi declare unions, compiler sẽ cấp phát để có thể lưu trữ members lớn nhất của union đó. Vì members share chung bộ nhớ
 + Cách truy xuất unions cũng giống như structure, can use dot or arrow operator.
 + Bit-fields: type: length, với kiểu là int, signed hoặc unsigned và length là độ dài của bit.
++ Enum cách khai báo enum tag {symbol, symbol} variables, mỗi symbol đại diện cho 1 số nguyên
