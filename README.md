@@ -36,3 +36,6 @@
 + Enum cách khai báo enum tag {symbol, symbol} variables, mỗi symbol đại diện cho 1 số nguyên
 + Getchar() -> putchar() -> getch() -> getche() -> puts() -> gets().
 Getch() 
++ Scanf("%20s", str) => Số kí tự tối đa của str là 20
++ Put l precede c or s 
++ scanf("%*c", &variable) thì sẽ bỏ qua input có format là char. Tương tự với d scanf("%*d%c", &char_variable) sẽ bỏ qua input là số và đọc input là char
