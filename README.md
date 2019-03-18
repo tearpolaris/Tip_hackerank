@@ -39,3 +39,5 @@ Getch()
 + Scanf("%20s", str) => Số kí tự tối đa của str là 20
 + Put l precede c or s 
 + scanf("%*c", &variable) thì sẽ bỏ qua input có format là char. Tương tự với d scanf("%*d%c", &char_variable) sẽ bỏ qua input là số và đọc input là char
++ fputc() và putc() là hai hàm có chức năng tương đương nhau(ghi vào file được chỉ bởi con tro FILE*), vì lý do tương thích với phiên bản cũ của C 
++ Tương tự là getc() và fgetc()
