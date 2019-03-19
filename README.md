@@ -41,3 +41,8 @@ Getch()
 + scanf("%*c", &variable) thì sẽ bỏ qua input có format là char. Tương tự với d scanf("%*d%c", &char_variable) sẽ bỏ qua input là số và đọc input là char
 + fputc() và putc() là hai hàm có chức năng tương đương nhau(ghi vào file được chỉ bởi con tro FILE*), vì lý do tương thích với phiên bản cũ của C 
 + Tương tự là getc() và fgetc()
+Text and binary streams differ in several ways:
++ The data read from a text stream is divided into lines which are terminated by newline ('\n') characters, while a binary stream is simply a long series of characters. A text stream might on some systems fail to handle lines more than 254 characters long (including the terminating newline character).
+    ** On some systems, text files can contain only printing characters, horizontal tab characters, and newlines, and so text streams may not support other characters. However, binary streams can handle any character value.
+    ** Space characters that are written immediately preceding a newline character in a text stream may disappear when the file is read in again.
+    ** More generally, there need not be a one-to-one mapping between characters that are read from or written to a text stream, and the characters in the actual file. 
