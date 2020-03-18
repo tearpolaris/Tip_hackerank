@@ -46,3 +46,182 @@ Text and binary streams differ in several ways:
     ** On some systems, text files can contain only printing characters, horizontal tab characters, and newlines, and so text streams may not support other characters. However, binary streams can handle any character value.
     ** Space characters that are written immediately preceding a newline character in a text stream may disappear when the file is read in again.
     ** More generally, there need not be a one-to-one mapping between characters that are read from or written to a text stream, and the characters in the actual file. 
+    
+    
+    #ifndef BSA_TASK
+#define BSA_TASK
+#include <stdint.h>
+#include "define.h"
+#include "errno.h"
+
+#ifdef _WIN32
+    #include <windows.h>
+#else
+    #include <unistd.h>
+    #include <pthread.h>
+#endif
+
+#define MAX_TASK 128
+#define NIL 0
+
+typedef struct Thread {
+    int32_t id;
+    HANDLE thread;
+} Thread_t;
+
+extern bool continue_program;
+
+int32_t bsakr_create_tsk(int8_t *name, int32_t priority, int32_t stacksize, FP entryptr, uint32_t arg);
+int32_t bsakr_start_tsk(int32_t tskid, int32_t arg);
+int32_t bsakr_terminate_tsk(int32_t tskid);
+int32_t bsakr_delete_tsk(int32_t tskid);
+void    exit_all_tsk(void);
+#endif
+
+#include "bsakr_task.h"
+
+int32_t task_num = 0;
+bool continue_program = true;
+Thread_t *tk[MAX_TASK];
+
+int32_t search_taskid(int32_t tskid) {
+    int32_t ret_pos = -1;
+    for (int i = 0; i < MAX_TASK; i++) {
+        if ((tk[i] != NULL) && (tskid == tk[i]->id)) {
+            ret_pos = i;
+            break;
+        }  
+    }
+    return ret_pos;
+}
+
+int32_t bsakr_create_tsk(int8_t *name, int32_t priority, int32_t stacksize, FP entryptr, uint32_t arg)
+{
+#ifdef _WIN32
+    Thread_t *thrd = (Thread_t*)malloc(1*sizeof(Thread_t));
+    int32_t id_thread, ret_api;
+
+    ret_api = -1;
+
+    if (task_num == MAX_TASK) {
+        dump_message_dummy("There is no space to create task\n");
+        return -1;
+    }
+    thrd->thread = NULL;
+
+    thrd->thread = CreateThread(NULL, stacksize, (LPTHREAD_START_ROUTINE)entryptr, LPVOID(&arg), 0, (LPDWORD)&id_thread); 
+    if (thrd->thread) {
+        thrd->id = id_thread;
+        tk[task_num] = thrd;
+        task_num++;
+        ret_api = id_thread;
+    }
+    else {
+        dump_message_dummy("Cannot create thread\n");
+        ret_api = -1;
+    }
+    return ret_api;
+#endif
+}
+
+int32_t bsakr_start_tsk(int32_t tskid, int32_t arg) {
+#ifdef _WIN32
+    int32_t id_pos;
+    HANDLE thread;
+    
+    id_pos = search_taskid(tskid); 
+    if (id_pos == -1) {
+        return E_ID;
+    } 
+
+    thread = tk[id_pos]->thread;
+    if (ResumeThread(thread) == -1) {
+        dump_message_dummy("Fail to launch task\n");    
+        return E_SYS;
+    }
+    return E_OK;
+#endif
+}
+
+int32_t bsakr_terminate_tsk(int32_t tskid) {
+#ifdef _WIN32
+    int32_t id_pos, exit_code, status;
+    Thread_t *thrd;
+    
+    exit_code = STILL_ACTIVE;
+    status = ERROR_INVALID_PARAMETER;
+    id_pos = search_taskid(tskid); 
+    if (id_pos == -1) {
+        dump_message_dummy("Task id is not exist\n");
+        return E_NOEXS;
+    } 
+    thrd = tk[id_pos];
+
+    GetExitCodeThread(thrd->thread, (LPDWORD)&exit_code); 
+    
+    if (exit_code != STILL_ACTIVE) {
+        dump_message_dummy("Task is not actived\n");
+        return E_OBJ;
+    }
+    SuspendThread(thrd->thread);
+    return E_OK;
+#endif
+}
+
+int32_t bsakr_delete_tsk(int32_t tskid) {
+    int32_t id_pos;
+    Thread_t *thrd;
+    DWORD exit_code;
+    
+    id_pos = search_taskid(tskid); 
+    if (id_pos == -1) {
+        return E_NOEXS;
+    } 
+    exit_code = STILL_ACTIVE;
+    thrd = tk[id_pos];
+    GetExitCodeThread(thrd->thread, &exit_code); 
+
+    if (exit_code != STILL_ACTIVE) {
+        return E_OBJ;
+    }
+    TerminateThread(thrd->thread, exit_code);
+    CloseHandle(thrd->thread);
+    thrd->thread = NULL;
+    free(tk[id_pos]);
+    task_num--;
+
+    return E_OK;
+} 
+
+void exit_all_tsk(void) {
+    DWORD exit_code;
+
+    continue_program = false;
+    for (int i = 0; i < MAX_TASK; i++) {
+        if (tk[i] != NULL) {
+            printf("i value is %d\n", i);
+            //GetExitCodeThread(tk[i]->thread, &exit_code); 
+            //if (exit_code != STILL_ACTIVE) {
+            //    TerminateThread(tk[i]->thread, exit_code);
+            //    CloseHandle(tk[i]->thread);
+            //}
+            do {
+                GetExitCodeThread(tk[i]->thread, (LPDWORD)&exit_code);
+                printf("Waiting to end driver\n");
+            } while (exit_code == STILL_ACTIVE);
+            //TerminateThread(tk[i]->thread, exit_code);
+            //CloseHandle(tk[i]->thread);
+            //tk[i]->thread = NULL;
+            //free(tk[i]);
+            Sleep(500);
+        }      
+    }
+    for (int i = 0; i < MAX_TASK; i++) {
+        if (tk[i] != NULL) {
+            free(tk[i]);
+        }
+    }
+}
+
+
+
